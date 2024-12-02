@@ -52,22 +52,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void OnDrawGizmos()
-    {
-        Vector3 Direction = (transform.position - player.transform.position);
-        float Distance = Direction.magnitude;
-
-        if (Direction.magnitude > 6)
-        {
-            Gizmos.color = Color.green;
-        }
-        else
-        {
-            Gizmos.color = Color.red;
-
-        }
-        Gizmos.DrawLine(transform.position, player.transform.position);
-    }
+    
        
 
 }

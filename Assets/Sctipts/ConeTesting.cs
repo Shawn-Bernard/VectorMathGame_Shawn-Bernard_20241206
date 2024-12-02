@@ -5,7 +5,7 @@ using UnityEngine;
 public class ConeTesting : MonoBehaviour
 {
     public GameObject Player;
-    public int ConeAngle = 40;
+    int ConeAngle = 80;
     public int Range = 6;
     // Start is called before the first frame update
     void Start()
@@ -20,28 +20,50 @@ public class ConeTesting : MonoBehaviour
 
       Vector3 EnemyPosition = transform.position.normalized;
 
-      Vector3 distance = PlayerPosition - EnemyPosition ;
+      Vector3 distance =  EnemyPosition - PlayerPosition;
 
-     float CosTheta = Vector3.Dot(transform.forward, distance);
-     float Angle =   Mathf.Acos(CosTheta) * Mathf.Rad2Deg;
-        if (Angle <= ConeAngle * 0.5)
+        
+        
+
+        
+        if (DetectPlayer() == true)
         {
-            Debug.Log("In Cone");
+            
+           
+
+
         }
         
-        float playerdot = Vector3.Dot(PlayerPosition, distance);
-        Debug.Log(Angle);
+
+
+        
+        
     }
-    bool DetechPlayer()
+    bool DetectPlayer()
     {
-        Vector3 PlayerPosition = Player.transform.position.normalized;
-        Vector3 EnemyPosition = transform.position.normalized;
+
+        Vector3 PlayerPosition = Player.transform.position;
+        Vector3 EnemyPosition = transform.position;
         Vector3 distance = PlayerPosition - EnemyPosition;
+        RaycastHit hit;
+        float CosTheta = Vector3.Dot(transform.forward, distance);
+        float Angle = Mathf.Acos(CosTheta) * Mathf.Rad2Deg;
         if (distance.magnitude <= Range)
         {
-            //if(Physics.Raycast(transform.position,transform.forward, ))
+            if (Physics.Raycast(transform.position, distance.normalized, out hit, 300))
+            {
 
-            //after if do logic for finding if player is in cone
+                if (hit.collider.tag == "Player")
+                {
+                    if (Angle <= ConeAngle)
+                    {
+                        Debug.Log("In Cone");
+                    }
+                    
+                }
+            }
         }
+        return false;
     }
 }
+
