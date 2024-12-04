@@ -16,28 +16,41 @@ public class ConeTesting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      Vector3 PlayerPosition = Player.transform.position.normalized;
+      Vector3 PlayerPosition = Player.transform.position;
 
-      Vector3 EnemyPosition = transform.position.normalized;
+      Vector3 EnemyPosition = transform.position;
 
-      Vector3 distance =  EnemyPosition - PlayerPosition;
+      Vector3 distance = PlayerPosition - EnemyPosition;
 
+      Vector3 forward = transform.TransformDirection(Vector3.forward);
+
+        float angle = Vector3.Dot(forward, distance);
+        float degrees = Mathf.Acos(angle) * Mathf.Rad2Deg;
         
-        
-
-        
-        if (DetectPlayer() == true)
+        //Checking if my dot is 0 meaning behind player
+        if (Vector3.Dot(forward,distance) < 0)
         {
             
-           
+        }
 
+        float CosTheta = Vector3.Dot(transform.forward, distance.normalized);
+        float Angle = Mathf.Acos(CosTheta) * Mathf.Rad2Deg;
 
+        if (DetectPlayer() == true)
+        {
+            if (Angle <= ConeAngle / 2)
+            {
+                Debug.Log("In Cone");
+            }
         }
         
-
+        
 
         
-        
+
+
+
+
     }
     bool DetectPlayer()
     {
@@ -46,20 +59,16 @@ public class ConeTesting : MonoBehaviour
         Vector3 EnemyPosition = transform.position;
         Vector3 distance = PlayerPosition - EnemyPosition;
         RaycastHit hit;
-        float CosTheta = Vector3.Dot(transform.forward, distance);
-        float Angle = Mathf.Acos(CosTheta) * Mathf.Rad2Deg;
+        
         if (distance.magnitude <= Range)
         {
-            if (Physics.Raycast(transform.position, distance.normalized, out hit, 300))
+            if (Physics.Raycast(transform.position, distance.normalized, out hit, Range))
             {
 
                 if (hit.collider.tag == "Player")
                 {
-                    if (Angle <= ConeAngle)
-                    {
-                        Debug.Log("In Cone");
-                    }
-                    
+
+                    return true;
                 }
             }
         }
