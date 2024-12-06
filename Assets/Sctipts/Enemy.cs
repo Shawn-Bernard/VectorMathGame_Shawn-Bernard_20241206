@@ -42,8 +42,10 @@ public class Enemy : MonoBehaviour
     bool DetectPlayer()
     {
         Vector3 distance = player.transform.position - transform.position;
-        float CosTheta = Vector3.Dot(transform.forward, distance.normalized);
-        float Angle = Mathf.Acos(CosTheta) * Mathf.Rad2Deg;
+        // Getting the dot proction between enemy forward direction to distance direction 
+        float directionToPlayer = Vector3.Dot(transform.forward, distance.normalized);
+        //Converting my angle to degrees
+        float angleToPlayer = Mathf.Acos(directionToPlayer) * Mathf.Rad2Deg;
         RaycastHit hit;
         //If my distance is less than range, so within range 
         if (distance.magnitude <= range)
@@ -54,7 +56,7 @@ public class Enemy : MonoBehaviour
                 //If my hit collided with my player tag returns true
                 if (hit.collider.tag == "Player")
                 {
-                    if (Angle <= coneAngle / 2)
+                    if (angleToPlayer <= coneAngle / 2)
                     {
                         enemy.SetDestination(player.transform.position);
                         if (distance.magnitude <= caughtRange)
